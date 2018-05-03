@@ -1,7 +1,7 @@
 const config = {
   // if process.env is not being set, you may need to set 'Defaults env_keep +=' in the /etc/sudoers
   environment: process.env.NODE_ENV || 'development', // development, testing, staging or production
-  protocol: process.env.PROTOCOL || 'https',
+  protocol: process.env.PROTOCOL || 'http',
   httpsCert: process.env.HTTPS_CERT || '<path/to/https/server.crt>',
   httpsKey: process.env.HTTPS_KEY || '<path/to/https/key.pem>',
   allowBadCertForDev: process.env.ALLOW_BAD_CERT_FOR_DEV || 'YES',
@@ -9,7 +9,9 @@ const config = {
   auth0Logout: process.env.AUTH0_LOGOUT || 'NO',
   port: process.env.PORT || 4000,
   host: process.env.WEBSITE_HOSTNAME || 'localhost',
-  dbString: process.env.DATABASE_URL || '<DB_URL>',
+  dbString: process.env.DATABASE_URL || {
+    database: 'sport_corp', username: 'root', password: '', host : '127.0.0.1', port : '3306', dialect : 'mysql'
+  },
   urlencodedExtended: process.env.URL_ENCODED_EXTENDED || 'NO',
   force: process.env.FORCE || 'YES', // YES to clear the db on server restart
   sessionSecret: process.env.SESSION_SECRET || '<SESSION_SECRET>',
