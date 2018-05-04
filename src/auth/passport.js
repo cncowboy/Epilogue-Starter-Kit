@@ -7,6 +7,8 @@ import TwitterStrategy from 'passport-twitter';
 import config from '../config';
 import utilities from '../utilities';
 
+import { Strategy as LocalStrategy } from 'passport-local';
+
 export default {
   /**
    @name passportOptions
@@ -30,6 +32,7 @@ export default {
     /* eslint no-underscore-dangle: ["error", { "allow": ["_json"] }] */
     const profileJson = ((profile || {})._json || {});
     returnObj.username = this.getUsername(profile, profileJson);
+    returnObj.signName = returnObj.username;
     returnObj.emailAddress = this.getEmailAddress(profileJson);
     returnObj.profilePicture = this.getProfilePicture(profileJson);
     return returnObj;
@@ -155,6 +158,8 @@ export default {
         passportConfig.profileFields = config.authMethods[passportOptionName].profileFields;
       }
       if (!(Array.isArray(config.authOptionsDisabled) && config.authOptionsDisabled.indexOf(passportOptionName) !== -1)) {
+        console.log(passportOptionName);
+
         passport.use(new PassportStrategy(passportConfig, (req, accessToken, refreshToken, extraParams, profile, done) => {
           const authAttempt = async () => {
             const id = this.getId(req, profile);
@@ -167,7 +172,7 @@ export default {
             utilities.throwErrorConditionally(userResource, userErrorMessage);
             let foundUser = await userResource.findOne({
               attributes: ['id', 'username', 'emailAddress', 'profilePicture'],
-              where: { id },
+              where: {id},
             });
             if (!id) {
               foundUser = false;
@@ -190,7 +195,18 @@ export default {
           authAttempt().catch(done);
         }));
       }
+
+      passport.use(new PassportStrategy(passportConfig, (username, password, done) => {
+        const authAttempt = async () => {
+          const awaitedResourcesFromSetup = await resourcesFromSetup;
+          const userResource = awaitedResourcesFromSetup.get('User')[2];
+          const authenticate = userResource.authenticate();
+          authenticate(username, password, done);
+        };
+        authAttempt().catch(done);
+      }));
     });
+
     return passport;
   },
 };

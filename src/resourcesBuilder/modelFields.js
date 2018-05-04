@@ -12,7 +12,7 @@ export default {
     const fields = userDefinedFieldsObj;
     fields.updatedBy = sequelize.STRING;
     if (isGroup) {
-      fields.OwnerID = sequelize.STRING;
+      fields.OwnerID = sequelize.INTEGER;
     }
     return fields;
   },

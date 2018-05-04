@@ -10,7 +10,7 @@ const config = {
   port: process.env.PORT || 4000,
   host: process.env.WEBSITE_HOSTNAME || 'localhost',
   dbString: process.env.DATABASE_URL || {
-    database: 'sport_corp', username: 'root', password: '', host : '127.0.0.1', port : '3306', dialect : 'mysql'
+    database: 'sport_corp', username: 'root', password: '123456', host : '127.0.0.1', port : '3306', dialect : 'mysql'
   },
   urlencodedExtended: process.env.URL_ENCODED_EXTENDED || 'NO',
   force: process.env.FORCE || 'YES', // YES to clear the db on server restart
@@ -52,6 +52,9 @@ const config = {
       id: process.env.TWITTER_CONSUMER_KEY || '<TWITTER_CONSUMER_KEY>',
       secret: process.env.TWITTER_CONSUMER_SECRET || '<TWITTER_CONSUMER_SECRET>',
       callbackURL: process.env.TWITTER_CALLBACK_URL || '/login/twitter/callback',
+    },
+    local: {
+
     },
   },
   jwt: {
