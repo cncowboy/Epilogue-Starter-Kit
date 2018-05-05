@@ -28,6 +28,14 @@ export default {
         done(null, user);
       });
     }
+    app.get('/register',
+      passport.authenticate('local.register', {
+        successRedirect: '/registerSuccess',
+        failureRedirect: '/registerFailure',
+        failureFlash: true
+      }), function(req, res, next) {
+
+      });
     const authMethods = Object.keys(config.authMethods);
     authMethods.forEach((authMethod) => {
       if (!(Array.isArray(config.authOptionsDisabled) && config.authOptionsDisabled.indexOf(authMethod) !== -1)) {

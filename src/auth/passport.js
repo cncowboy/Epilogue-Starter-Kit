@@ -195,17 +195,28 @@ export default {
           authAttempt().catch(done);
         }));
       }
-
-      passport.use(new PassportStrategy(passportConfig, (username, password, done) => {
-        const authAttempt = async () => {
-          const awaitedResourcesFromSetup = await resourcesFromSetup;
-          const userResource = awaitedResourcesFromSetup.get('User')[2];
-          const authenticate = userResource.authenticate();
-          authenticate(username, password, done);
-        };
-        authAttempt().catch(done);
-      }));
     });
+    passportConfig.passReqToCallback = true;
+    passport.use(new LocalStrategy(passportConfig, (req, username, password, done) => {
+      const authAttempt = async () => {
+        const awaitedResourcesFromSetup = await resourcesFromSetup;
+        const userResource = awaitedResourcesFromSetup.get('User')[2];
+        const authenticate = userResource.authenticate();
+        authenticate(username, password, done);
+      };
+      authAttempt().catch(done);
+    }));
+
+    passportConfig.usernameField = 'username';
+    passportConfig.passwordField = 'password';
+    passport.use('local.register', new LocalStrategy(passportConfig, (req, username, password, done) => {
+      const authAttempt = async () => {
+        const awaitedResourcesFromSetup = await resourcesFromSetup;
+        const userResource = awaitedResourcesFromSetup.get('User')[2];
+        userResource.register(username, password, done);
+      };
+      authAttempt().catch(done);
+    }));
 
     return passport;
   },

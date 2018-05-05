@@ -33,15 +33,6 @@ const groupXrefModel = epilogueSetup.setupEpilogue(app, database, Sequelize);
 const resources = epilogueSetup.setupResources(database, Sequelize, groupXrefModel);
 // ---------------------auth--------------------------
 const passport = Passport.setup(resources);
-/*
-const userResources = resources.get('User');
-const User = PassportLocalSequelize.attachToUser( userResources[2], {
-  usernameField: 'signName',
-  hashField: 'hash',
-  saltField: 'salt',
-});
-passport.use(User.createStrategy());
-*/
 
 app.use(expressJwt({
   secret: config.jwt.secret,
